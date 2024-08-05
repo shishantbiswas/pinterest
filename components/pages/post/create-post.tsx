@@ -135,7 +135,9 @@ export default function CreatePost() {
         formData.append(key, value.toString());
       });
       if (!user) {
-        toast.error("Error: You're not logged In", { description: "Please try refreshing the page" });
+        toast.error("Error: You're not logged In", {
+          description: "Please try refreshing the page",
+        });
         return;
       }
       fetch("/api/new", { method: "POST", body: formData }).then((res) => {
@@ -214,24 +216,6 @@ export default function CreatePost() {
                   </FormItem>
                 )}
               />
-              {/* <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isPending || !image}
-                        placeholder="Add a Description"
-                        {...field}
-                        type="text"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
               <FormField
                 control={form.control}
                 name="link"
@@ -252,39 +236,10 @@ export default function CreatePost() {
               />
               <h1 className="text-sm">Tags</h1>
               <div className="flex flex-wrap gap-2 prose">
-                {tags.map((tag) => {
-                  const [isSelected, setIsSelected] = useState(false);
-
-                  return (
-                    <button
-                      style={{
-                        backgroundColor: isSelected ? "#64748b" : "",
-                        borderRadius: isSelected ? "50px" : "5px",
-                        color: isSelected ? "white" : "",
-                      }}
-                      disabled={isPending || !image}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        addUniqueTag(tag);
-                        setIsSelected(!isSelected);
-                      }}
-                      className="px-3 text-sm py-1 border duration-500 flex gap-2 items-center text-center hover:bg-slate-200 disabled:opacity-50 disabled:hover:bg-transparent transition-all slate"
-                      key={tag.id}
-                    >
-                      {tag.name}
-                      <XCircle
-                        size={13}
-                        className="transition-all w-fit text-white"
-                        style={{
-                          scale: isSelected ? "1" : "0",
-                          width: isSelected ? "" : "0px",
-                        }}
-                      />
-                    </button>
-                  );
-                })}
+                {tags.map((tag) => (
+                  <TagsArray key={tag.id} tag={tag} addUniqueTag={addUniqueTag} image={image} isPending={isPending} />
+                ))}
               </div>
-              {/* <FormError message={error} /> */}
               <Button
                 disabled={isPending || !image}
                 type="submit"
@@ -303,3 +258,49 @@ export default function CreatePost() {
     </Section>
   );
 }
+
+const TagsArray = ({
+  addUniqueTag,
+  isPending,
+  image,
+  tag,
+}: {
+  tag: {
+    id: number;
+    name: string;
+    value: string;
+  };
+  image: File | null | undefined;
+  addUniqueTag: (tags:Tags) => void;
+  isPending: boolean;
+}) => {
+  const [isSelected, setIsSelected] = useState(false);
+
+  return (
+    <button
+      style={{
+        backgroundColor: isSelected ? "#64748b" : "",
+        borderRadius: isSelected ? "50px" : "5px",
+        color: isSelected ? "white" : "",
+      }}
+      disabled={isPending || !image}
+      onClick={(event) => {
+        event.preventDefault();
+        addUniqueTag(tag);
+        setIsSelected(!isSelected);
+      }}
+      className="px-3 text-sm py-1 border duration-500 flex gap-2 items-center text-center hover:bg-slate-200 disabled:opacity-50 disabled:hover:bg-transparent transition-all slate"
+      key={tag.id}
+    >
+      {tag.name}
+      <XCircle
+        size={13}
+        className="transition-all w-fit text-white"
+        style={{
+          scale: isSelected ? "1" : "0",
+          width: isSelected ? "" : "0px",
+        }}
+      />
+    </button>
+  );
+};

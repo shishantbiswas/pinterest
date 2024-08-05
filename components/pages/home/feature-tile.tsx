@@ -54,7 +54,7 @@ export default function FeatureTile() {
           </h3>
           <h4 className="text-2xl font-light opacity-70">
             <Balancer>
-              I'm leaving links to awesome resources here use them if you want
+              I&apos;m leaving links to awesome resources here use them if you want
             </Balancer>
           </h4>
 

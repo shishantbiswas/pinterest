@@ -26,7 +26,7 @@ const Hero = () => {
           <h3 className="text-muted-foreground">
             <Balancer>
               why ?, because I can and learning Rust or Flutter is hard <br/>
-              here's a lovely error to cheer you up
+              here&apos;s a lovely error to cheer you up
             </Balancer>
           </h3>
           <div className="not-prose my-8 h-96 w-full overflow-hidden rounded-lg border md:h-[480px] md:rounded-xl">

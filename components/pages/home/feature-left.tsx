@@ -19,7 +19,7 @@ const Feature = () => {
           />
         </div>
         <div className="flex flex-col gap-6 py-8">
-          <h3 className="!my-0">What's this ?</h3>
+          <h3 className="!my-0">What&apos;s this ?</h3>
           <p className="font-light leading-[1.4] opacity-70">
             A pretentious placeholder image placed specifically to catch your attention and then sell you my cyrpto scam.
           </p>

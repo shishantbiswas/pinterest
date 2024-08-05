@@ -23,7 +23,7 @@ export default function Post({ post }: { post: RecordModel }) {
   const [userLikedImages, setUserLikedImages] = useState<RecordModel | null>(
     null
   );
-  // const [selectedPost, setSelectedPost] = useState<RecordModel | null>(null);
+  
   const user = useUser();
   const pathname = usePathname();
   const router = useRouter();
