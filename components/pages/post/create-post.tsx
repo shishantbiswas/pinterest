@@ -39,7 +39,7 @@ export default function CreatePost() {
     resolver: zodResolver(CreatePostSchema),
     defaultValues: {
       title: "",
-      description: "",
+      // description: "",
       link: "",
     },
   });
@@ -134,6 +134,10 @@ export default function CreatePost() {
       Object.entries(formValues).forEach(([key, value]) => {
         formData.append(key, value.toString());
       });
+      if (!user) {
+        toast.error("Error: You're not logged In", { description: "Please try refreshing the page" });
+        return;
+      }
       fetch("/api/new", { method: "POST", body: formData }).then((res) => {
         res.json().then((result) => {
           if (result.success) {
@@ -210,7 +214,7 @@ export default function CreatePost() {
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="description"
                 render={({ field }) => (
@@ -227,7 +231,7 @@ export default function CreatePost() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
               <FormField
                 control={form.control}
                 name="link"

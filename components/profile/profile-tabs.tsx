@@ -19,10 +19,12 @@ import { toast } from "sonner";
 import ImageDropzone from "../image-dropzone";
 
 export default function ProfileTabs({
+  likedPosts,
   posts,
   id,
 }: {
   posts: RecordModel[] | null;
+  likedPosts: RecordModel | undefined | null;
   id: string;
 }) {
   const signedInUser = useUser();
@@ -63,11 +65,20 @@ export default function ProfileTabs({
       <TabsList className="w-fit flex items-center justify-start ">
         <TabsTrigger value="created">Created</TabsTrigger>
         {signedInUser?.id == id && (
-          <TabsTrigger value="profile">Edit profile</TabsTrigger>
+          <>
+            <TabsTrigger value="saved">Saved</TabsTrigger>
+            <TabsTrigger value="profile">Edit profile</TabsTrigger>
+          </>
         )}
       </TabsList>
       <TabsContent value="created" className="columns-3  gap-4 h-fit my-8">
         {posts && posts.map((post) => <Post key={post.id} post={post} />)}
+      </TabsContent>
+
+      <TabsContent value="saved" className="columns-3  gap-4 h-fit my-8">
+        {likedPosts?.expand?.likedPost?.map((post: RecordModel) => (
+          <Post key={post.id} post={post} />
+        ))}
       </TabsContent>
 
       <TabsContent value="profile">

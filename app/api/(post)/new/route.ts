@@ -8,12 +8,12 @@ export async function POST(request: Request) {
 
   const image = formData.get("image") as File;
   const title = formData.get("title");
-  const description = formData.get("description");
   const link = formData.get("link");
   const tags = formData.get("tags");
   const user = formData.get("user") as string;
   const userJson = JSON.parse(user) as RecordModel;
 
+  
   const imageBuffer = await image.arrayBuffer();
   const sharpImage = await sharp(imageBuffer).webp().toBuffer();
 
@@ -26,7 +26,6 @@ export async function POST(request: Request) {
     const newPost = await pb.collection("posts").create({
       title,
       link,
-      description,
       tags: tags,
       userId: userJson.id,
       image: blob,

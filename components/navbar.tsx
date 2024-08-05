@@ -21,22 +21,9 @@ import {
 import ThemeToggle from "./theme-toogle";
 import useUser from "@/hooks/useUser";
 import pb from "@/lib/pb";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-type NavbarLink = {
-  id: number;
-  name: string;
-  route: string;
-  icon?: React.ReactNode;
-};
 export default function Navbar() {
-  const navLinks: NavbarLink[] = [
-    {
-      id: 1,
-      name: "Explore",
-      route: "/explore",
-    },
-  ];
   const user = useUser();
   const router = useRouter();
   const pathname = usePathname();
@@ -51,22 +38,60 @@ export default function Navbar() {
             </SheetTrigger>
             <SheetContent>
               <SheetHeader>
-                <SheetTitle>fabrika.</SheetTitle>
+                <SheetTitle>Pinterest</SheetTitle>
                 <SheetDescription>
-                  Scale and launch products with expert developers, on-demand,
-                  at a flat monthly fee
+                  Basic Pinterest clone made with Next Js, Tailwindcss and
+                  Pocketbase as backend.
                 </SheetDescription>
               </SheetHeader>
               <div className="flex flex-col space-y-3 mt-[1rem] z-[99]">
-                {navLinks.map((link) => (
-                  <DialogClose asChild key={link.id}>
-                    <Link href={link.route}>
-                      <Button variant="outline" className="w-full">
-                        {link.name}
+                <DialogClose asChild>
+                  <Link href={"/explore"}>
+                    <Button variant="outline" className="w-full">
+                      Explore
+                    </Button>
+                  </Link>
+                </DialogClose>
+
+                {user ? (
+                  <>
+                    <DialogClose asChild>
+                      <Link href={`/profile/${user?.id}`}>
+                        <Button
+                        variant="outline"
+                        className="flex items-center gap-2 w-full"
+                        >
+                          Profile
+                        </Button>
+                      </Link>
+                    </DialogClose>
+                    <DialogClose asChild>
+                      <Button
+                        onClick={() => {
+                          pb.authStore.clear();
+                          router.push("/sign-in");
+                        }}
+                        variant="outline"
+                        className="flex items-center gap-2 w-full hover:bg-red-300"
+                      >
+                        <LogOutIcon className="size-4" />
+                        Log Out
+                      </Button>
+                    </DialogClose>
+                  </>
+                ) : (
+                  <DialogClose asChild>
+                    <Link href={"/sign-in"}>
+                      <Button
+                        variant="outline"
+                        className="flex items-center gap-2 w-full"
+                      >
+                        <User2Icon className="size-4" />
+                        Sign In
                       </Button>
                     </Link>
                   </DialogClose>
-                ))}
+                )}
 
                 <ThemeToggle />
               </div>
@@ -80,22 +105,22 @@ export default function Navbar() {
             </NavigationMenuList>
           </NavigationMenu>
           <div className="hidden md:flex items-center gap-2">
-              <Link href={`/explore`} >
-                <Button variant="ghost" className="flex items-center gap-2">
-                  Explore
-                </Button>
-              </Link>
+            <Link href={`/explore`}>
+              <Button variant="ghost" className="flex items-center gap-2">
+                Explore
+              </Button>
+            </Link>
             {user ? (
               <>
-              <Link href={`/profile/${user?.id}`} >
-                <Button variant="ghost" className="flex items-center gap-2">
-                  Profile
-                </Button>
-              </Link>
+                <Link href={`/profile/${user?.id}`}>
+                  <Button variant="ghost" className="flex items-center gap-2">
+                    Profile
+                  </Button>
+                </Link>
                 <Button
                   onClick={() => {
-                    pb.authStore.clear()
-                    router.push('/sign-in')
+                    pb.authStore.clear();
+                    router.push("/sign-in");
                   }}
                   variant="ghost"
                   className="flex items-center gap-2 hover:bg-red-300"
@@ -116,7 +141,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      {pathname === "/new" || pathname === "/"  ? null : (
+      {pathname === "/new" || pathname === "/" ? null : (
         <button
           onClick={() => router.push("/new")}
           className="fixed bottom-12 right-12 flex items-center p-4 bg-red-600 z-50 text-white rounded-full aspect-square"
