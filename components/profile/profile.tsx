@@ -23,7 +23,7 @@ export default function Profile({ id }: { id: string }) {
   const fetchPosts = async () => {
     const posts = await pb
       .collection("posts")
-      .getFullList({ filter: `userId.id~"${id}"` });
+      .getFullList({ filter: `userId.id~"${id}"`, expand:"userId"});
     return posts;
   };
 
@@ -51,7 +51,7 @@ export default function Profile({ id }: { id: string }) {
   return (
     <Section>
       <Container>
-        <UserDetails user={userDetails} />
+        <UserDetails userDetails={userDetails} />
         <ProfileTabs posts={posts} id={id} likedPosts={likedPosts} />
       </Container>
     </Section>

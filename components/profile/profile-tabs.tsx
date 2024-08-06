@@ -31,7 +31,6 @@ export default function ProfileTabs({
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
-  const [image, setImage] = useState<File | null>(null);
 
   const formData = new FormData();
 
@@ -45,7 +44,6 @@ export default function ProfileTabs({
 
     formData.append("name", name);
     formData.append("username", username);
-    formData.append("image", image || "");
 
     fetch("/api/update-profile", { method: "POST", body: formData }).then(
       (res) => {
@@ -56,9 +54,6 @@ export default function ProfileTabs({
     );
   };
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setImage(acceptedFiles[0]);
-  }, []);
 
   return (
     <Tabs defaultValue="created" className="mt-4">
@@ -90,27 +85,7 @@ export default function ProfileTabs({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            <Label htmlFor="avatar">Avatar</Label>
-            <div className="space-y-1">
-              {!image ? (
-                <div className=" h-[200px] mb-4">
-                  <ImageDropzone className="w-[450px] h-full" onDrop={onDrop} />
-                </div>
-              ) : (
-                <div className="relative w-full flex items-center justify-center flex-col h-[270px] mb-4">
-                  <img
-                    className="rounded-full aspect-square size-[200px] "
-                    src={URL.createObjectURL(image)}
-                    alt={image.name}
-                  />
-                  <button
-                    onClick={() => setImage(null)}
-                    className="py-2 rounded-md text-white bg-red-500 flex items-center text-nowrap px-4"
-                  >
-                    Remove Image
-                  </button>
-                </div>
-              )}
+            <div className="space-y-1">             
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"

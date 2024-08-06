@@ -10,7 +10,7 @@ export default function Explore() {
   const [data, setData] = useState<ListResult<RecordModel> | null>(null);
 
   const fetchPosts = async (page: number) => {
-    const posts = await pb.collection("posts").getList(page, 24);
+    const posts = await pb.collection("posts").getList(page, 24,{expand:"userId"})
     return posts;
   };
 

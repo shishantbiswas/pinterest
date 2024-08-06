@@ -9,7 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { RecordModel } from "pocketbase";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ImageError from "./image-error";
 import pb from "@/lib/pb";
 import useUser from "@/hooks/useUser";
@@ -23,7 +23,8 @@ export default function Post({ post }: { post: RecordModel }) {
   const [userLikedImages, setUserLikedImages] = useState<RecordModel | null>(
     null
   );
-  
+  // const [userDetails, setUserDetails] = useState<RecordModel | null>(null);
+
   const user = useUser();
   const pathname = usePathname();
   const router = useRouter();
@@ -83,12 +84,21 @@ export default function Post({ post }: { post: RecordModel }) {
       toast("Failed to copy text.");
     }
   };
+
+  // const fetchUser = async () => {
+  //   const user = await pb.collection("users").getOne(post.userId);
+  //   return user;
+  // };
+
+  // useEffect(() => {
+  //     fetchUser().then((user) => {
+  //     setUserDetails(user);
+  //   });
+  // }, [user]);
+
   return (
     <>
-      <div
-        onClick={() => router.push(`${pathname}?post=${post.id}`)}
-        className="relative group h-fit break-inside-avoid mb-4"
-      >
+      <div className="relative group h-fit break-inside-avoid mb-4">
         {!loaded && !error && (
           <div className="h-[250px] aspect-square rounded-xl w-full absolute top-0 right-0 bg-black/50 animate-pulse" />
         )}
@@ -103,9 +113,12 @@ export default function Post({ post }: { post: RecordModel }) {
             alt={post.title}
           />
         )}
-        <div className="absolute flex flex-col justify-between bottom-0 right-0 h-full w-full group-hover:opacity-100 transition-all opacity-0 bg-gradient-to-br from-transparent to-black/80 text-white rounded-xl p-4">
+        <div
+          onClick={() => router.push(`${pathname}?post=${post.id}`)}
+          className="absolute flex flex-col justify-between bottom-0 right-0 h-full w-full group-hover:opacity-100 transition-all opacity-0 bg-gradient-to-br from-transparent to-black/80 text-white rounded-xl p-4"
+        >
           <h1 className="text-white capitalize text-2xl">{post?.title}</h1>
-          <div className="flex items-end gap-2 justify-end text-sm">
+          <div className="flex items-end  gap-2 justify-end text-sm">
             {user?.likedPost.includes(post.id) ||
             userLikedImages?.likedPost.includes(post.id) ? (
               <button
@@ -154,7 +167,7 @@ export default function Post({ post }: { post: RecordModel }) {
                 ? "translateY(0px)"
                 : "translateY(300px)",
           }}
-          className="bg-white h-[80vh] overflow-y-scroll transition-all p-8 pb-28 rounded-t-lg min-h-12 w-full max-w-3xl"
+          className="bg-white h-[80vh] duration-500 overflow-y-scroll transition-all p-8 pb-28 rounded-t-lg min-h-12 w-full max-w-3xl"
         >
           <div className=" flex items-center justify-between ">
             <h1 className=" text-start  capitalize h-fit not-prose text-4xl font-semibold">
@@ -209,6 +222,21 @@ export default function Post({ post }: { post: RecordModel }) {
               <ExternalLinkIcon className="size-4 " />
               Open in New Tab
             </Link>
+          </div>
+          <div>
+            <div
+            onClick={()=>router.push(`/profile/${post?.expand?.userId.id}`)}
+            className="flex hover:bg-gray-100 transition-all cursor-pointer py-2 px-3 rounded-lg w-fit items-center justify-start gap-4 not-prose mt-4">
+              <img
+                className="size-[50px] rounded-full"
+                src={`${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/files/${post?.expand?.userId.collectionId}/${post?.expand?.userId.id}/${post?.expand?.userId.avatar}`}
+                alt={post?.expand?.userId.name}
+              />
+              <div>
+                <p className="text-lg">{post?.expand?.userId.name}</p>
+                <p className="opacity-60 text-sm">{"@"+post?.expand?.userId.username}</p>
+              </div>
+            </div>
           </div>
           <img
             src={`${process.env.NEXT_PUBLIC_POCKETBASE_URL}/api/files/${post.collectionId}/${post.id}/${post.image}`}

@@ -47,7 +47,7 @@ export default function ImageDropzone({
           </div>
           <div className="space-y-px">
             <p className="font-medium text-muted-foreground">
-              Drag {`'n`} drop files here, or click to select files
+              Drag {`'n`} drop file here, or click to select file
             </p>
             <p className="text-sm text-muted-foreground/70">
               <Balancer>You can upload JPEG, PNG, WEBP, AVIF Images</Balancer>
