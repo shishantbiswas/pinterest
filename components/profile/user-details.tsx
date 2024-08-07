@@ -13,15 +13,18 @@ export default function UserDetails({
 }: {
   userDetails: RecordModel | null;
 }) {
-  if (!userDetails) return;
-
+  
   const [openModal, setOpenModal] = useState(false);
   const [image, setImage] = useState<File | null>(null);
-
+  
+  
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setImage(acceptedFiles[0]);
   }, []);
-
+  
+  const signedInUser = useUser();
+  if (!userDetails) return;
+  
   const updateAvatar = async () => {
     if (!image) {
       toast.error("Error: Images is missing !");
@@ -38,7 +41,6 @@ export default function UserDetails({
     setOpenModal(false);
   };
 
-  const signedInUser = useUser();
   return (
     <div className="not-prose group size-full flex items-center flex-col ">
       <div className="relative flex items-center justify-center h-full">
